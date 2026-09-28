@@ -5,11 +5,9 @@ A simple, modern task manager and notes app built with React and Vite.
 This app lets you manage daily tasks and write longer notes, all in one place. It is a learning project built step by step to understand React fundamentals — components, props, state, events, lists, conditional rendering, and useEffect.
 
 ---
-
 ## Live Demo
 
-Coming soon — will be deployed on Vercel.
-
+[https://task-manager-ge86wehk6-faida3.vercel.app](https://task-manager-ge86wehk6-faida3.vercel.app)
 ---
 
 ## Features
