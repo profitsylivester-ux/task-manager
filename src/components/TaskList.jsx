@@ -8,13 +8,25 @@ function TaskList() {
   const [editingId, setEditingId] = useState(null)
 
   useEffect(() => {
-    const initialTasks = [
-      { id: 1, title: 'Study React', completed: true },
-      { id: 2, title: 'Build a task manager', completed: false },
-      { id: 3, title: 'Push to GitHub', completed: false },
-    ]
-    setTasks(initialTasks)
+    const savedTasks = localStorage.getItem('tasks')
+
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks))
+    } else {
+      const initialTasks = [
+        { id: 1, title: 'Study React', completed: true },
+        { id: 2, title: 'Build a task manager', completed: false },
+        { id: 3, title: 'Push to GitHub', completed: false },
+      ]
+      setTasks(initialTasks)
+    }
   }, [])
+
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem('tasks', JSON.stringify(tasks))
+    }
+  }, [tasks])
 
   useEffect(() => {
     document.title = `${tasks.length} tasks`
@@ -105,10 +117,6 @@ function TaskList() {
     return true
   })
 
-  if (tasks.length === 0) {
-    return <p>Loading tasks...</p>
-  }
-
   return (
     <div>
       <div className="input-row">
@@ -117,6 +125,9 @@ function TaskList() {
           placeholder="Add a new task"
           value={newTask}
           onChange={(event) => setNewTask(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') addTask()
+          }}
         />
         <button onClick={addTask}>Add</button>
       </div>
@@ -142,67 +153,71 @@ function TaskList() {
         </button>
       </div>
 
-      <ul>
-        {filteredTasks.map((task) => (
-          <li key={task.id}>
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => toggleComplete(task.id)}
-            />
-
-            {editingId === task.id ? (
+      {filteredTasks.length === 0 ? (
+        <p className="empty-message">No tasks to show.</p>
+      ) : (
+        <ul>
+          {filteredTasks.map((task) => (
+            <li key={task.id}>
               <input
-                className="edit-input"
-                type="text"
-                defaultValue={task.title}
-                autoFocus
-                onBlur={(event) => saveEdit(task.id, event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    saveEdit(task.id, event.target.value)
-                  } else if (event.key === 'Escape') {
-                    setEditingId(null)
-                  }
-                }}
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => toggleComplete(task.id)}
               />
-            ) : (
-              <span
-                className="task-title"
-                onClick={(event) => {
-                  event.stopPropagation()
-                  setMenuOpenId(menuOpenId === task.id ? null : task.id)
-                }}
-              >
-                {task.title} {task.completed && '✓'}
-              </span>
-            )}
 
-            {menuOpenId === task.id && (
-              <div
-                className="task-menu"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <button onClick={() => handleMenuAction('copy', task)}>
-                  Copy
-                </button>
-                <button onClick={() => handleMenuAction('share', task)}>
-                  Share
-                </button>
-                <button onClick={() => handleMenuAction('edit', task)}>
-                  Edit
-                </button>
-                <button onClick={() => handleMenuAction('complete', task)}>
-                  Mark Complete
-                </button>
-                <button onClick={() => handleMenuAction('delete', task)}>
-                  Delete
-                </button>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+              {editingId === task.id ? (
+                <input
+                  className="edit-input"
+                  type="text"
+                  defaultValue={task.title}
+                  autoFocus
+                  onBlur={(event) => saveEdit(task.id, event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      saveEdit(task.id, event.target.value)
+                    } else if (event.key === 'Escape') {
+                      setEditingId(null)
+                    }
+                  }}
+                />
+              ) : (
+                <span
+                  className="task-title"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setMenuOpenId(menuOpenId === task.id ? null : task.id)
+                  }}
+                >
+                  {task.title} {task.completed && '✓'}
+                </span>
+              )}
+
+              {menuOpenId === task.id && (
+                <div
+                  className="task-menu"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <button onClick={() => handleMenuAction('copy', task)}>
+                    Copy
+                  </button>
+                  <button onClick={() => handleMenuAction('share', task)}>
+                    Share
+                  </button>
+                  <button onClick={() => handleMenuAction('edit', task)}>
+                    Edit
+                  </button>
+                  <button onClick={() => handleMenuAction('complete', task)}>
+                    Mark Complete
+                  </button>
+                  <button onClick={() => handleMenuAction('delete', task)}>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

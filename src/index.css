@@ -44,6 +44,37 @@ header p {
   color: #777;
 }
 
+/* ===== TAB ROW ===== */
+.tab-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.tab-row a {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #777;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.tab-row a:hover {
+  color: #e63946;
+}
+
+.tab-row a.active {
+  color: #e63946;
+  border-bottom-color: #e63946;
+}
+
 /* ===== INPUT ROW ===== */
 .input-row {
   display: flex;
@@ -203,36 +234,6 @@ ul li input[type="checkbox"] {
   color: #e63946;
 }
 
-/* ===== TAB ROW ===== */
-.tab-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-  border-bottom: 2px solid #f0f0f0;
-}
-
-.tab-row button {
-  padding: 10px 20px;
-  background-color: transparent;
-  color: #777;
-  border: none;
-  border-bottom: 3px solid transparent;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 0.3s ease, border-color 0.3s ease;
-  font-family: inherit;
-}
-
-.tab-row button:hover {
-  color: #e63946;
-}
-
-.tab-row button.active {
-  color: #e63946;
-  border-bottom-color: #e63946;
-}
-
 /* ===== NOTE FORM ===== */
 .note-form {
   display: flex;
@@ -374,4 +375,56 @@ ul li input[type="checkbox"] {
 .note-actions button:last-child:hover {
   background-color: #777;
   color: #ffffff;
+}
+
+/* ===== QUOTE BOX ===== */
+.quote-box {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.quote-text {
+  font-size: 18px;
+  font-style: italic;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.quote-author {
+  font-size: 15px;
+  color: #e63946;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.quote-box button {
+  padding: 10px 22px;
+  background-color: #e63946;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-family: inherit;
+}
+
+.quote-box button:hover {
+  background-color: #c1121f;
+  transform: translateY(-2px);
+}
+
+.error-text {
+  color: #e63946;
+  font-size: 14px;
+}
+
+/* ===== EMPTY MESSAGE ===== */
+.empty-message {
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+  padding: 20px 0;
 }

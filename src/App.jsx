@@ -1,34 +1,42 @@
-import { useState } from 'react'
+import { Routes, Route, NavLink } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import TaskList from './components/TaskList'
 import NotesList from './components/NotesList'
+import QuoteBox from './components/QuoteBox'
 
 function App() {
-  const [activeTab, setActiveTab] = useState('tasks')
-
   return (
     <div className="app">
       <Header title="Task Manager" subtitle="Organize your tasks. Get things done." />
 
-      <div className="tab-row">
-        <button
-          className={activeTab === 'tasks' ? 'active' : ''}
-          onClick={() => setActiveTab('tasks')}
+      <nav className="tab-row">
+        <NavLink
+          to="/"
+          className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Tasks
-        </button>
-        <button
-          className={activeTab === 'notes' ? 'active' : ''}
-          onClick={() => setActiveTab('notes')}
+        </NavLink>
+        <NavLink
+          to="/notes"
+          className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Notes
-        </button>
-      </div>
+        </NavLink>
+        <NavLink
+          to="/quote"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Quote
+        </NavLink>
+      </nav>
 
       <main>
-        {activeTab === 'tasks' && <TaskList />}
-        {activeTab === 'notes' && <NotesList />}
+        <Routes>
+          <Route path="/" element={<TaskList />} />
+          <Route path="/notes" element={<NotesList />} />
+          <Route path="/quote" element={<QuoteBox />} />
+        </Routes>
       </main>
 
       <Footer />

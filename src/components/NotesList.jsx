@@ -1,24 +1,40 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function NotesList() {
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      title: 'Project ideas',
-      body: 'Ideas for new engineering and frontend projects.',
-    },
-    {
-      id: 2,
-      title: 'React learning notes',
-      body: 'Components, props, state, useEffect, lists, forms.',
-    },
-  ])
-
+  const [notes, setNotes] = useState([])
   const [newTitle, setNewTitle] = useState('')
   const [newBody, setNewBody] = useState('')
   const [editingId, setEditingId] = useState(null)
   const [editTitle, setEditTitle] = useState('')
   const [editBody, setEditBody] = useState('')
+
+  useEffect(() => {
+    const savedNotes = localStorage.getItem('notes')
+
+    if (savedNotes) {
+      setNotes(JSON.parse(savedNotes))
+    } else {
+      const initialNotes = [
+        {
+          id: 1,
+          title: 'Project ideas',
+          body: 'Ideas for new engineering and frontend projects.',
+        },
+        {
+          id: 2,
+          title: 'React learning notes',
+          body: 'Components, props, state, useEffect, lists, forms.',
+        },
+      ]
+      setNotes(initialNotes)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (notes.length > 0) {
+      localStorage.setItem('notes', JSON.stringify(notes))
+    }
+  }, [notes])
 
   function addNote() {
     if (newTitle.trim() === '' && newBody.trim() === '') return
@@ -80,38 +96,42 @@ function NotesList() {
         <button onClick={addNote}>Add Note</button>
       </div>
 
-      <div className="notes-list">
-        {notes.map((note) => (
-          <div className="note-card" key={note.id}>
-            {editingId === note.id ? (
-              <div>
-                <input
-                  type="text"
-                  value={editTitle}
-                  onChange={(event) => setEditTitle(event.target.value)}
-                />
-                <textarea
-                  value={editBody}
-                  onChange={(event) => setEditBody(event.target.value)}
-                />
-                <div className="note-actions">
-                  <button onClick={saveEdit}>Save</button>
-                  <button onClick={cancelEdit}>Cancel</button>
+      {notes.length === 0 ? (
+        <p className="empty-message">No notes yet.</p>
+      ) : (
+        <div className="notes-list">
+          {notes.map((note) => (
+            <div className="note-card" key={note.id}>
+              {editingId === note.id ? (
+                <div>
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(event) => setEditTitle(event.target.value)}
+                  />
+                  <textarea
+                    value={editBody}
+                    onChange={(event) => setEditBody(event.target.value)}
+                  />
+                  <div className="note-actions">
+                    <button onClick={saveEdit}>Save</button>
+                    <button onClick={cancelEdit}>Cancel</button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div>
-                <h3>{note.title}</h3>
-                <p>{note.body}</p>
-                <div className="note-actions">
-                  <button onClick={() => startEdit(note)}>Edit</button>
-                  <button onClick={() => deleteNote(note.id)}>Delete</button>
+              ) : (
+                <div>
+                  <h3>{note.title}</h3>
+                  <p>{note.body}</p>
+                  <div className="note-actions">
+                    <button onClick={() => startEdit(note)}>Edit</button>
+                    <button onClick={() => deleteNote(note.id)}>Delete</button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
