@@ -7,26 +7,21 @@ function TaskList() {
   const [menuOpenId, setMenuOpenId] = useState(null)
   const [editingId, setEditingId] = useState(null)
 
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks')
+  const API_URL = 'http://localhost:3000/tasks'
 
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks))
-    } else {
-      const initialTasks = [
-        { id: 1, title: 'Study React', completed: true },
-        { id: 2, title: 'Build a task manager', completed: false },
-        { id: 3, title: 'Push to GitHub', completed: false },
-      ]
-      setTasks(initialTasks)
+  useEffect(() => {
+    async function loadTasks() {
+      try {
+        const response = await fetch(API_URL)
+        const data = await response.json()
+        setTasks(data)
+      } catch (error) {
+        console.error('Failed to load tasks:', error)
+      }
     }
+
+    loadTasks()
   }, [])
-
-  useEffect(() => {
-    if (tasks.length > 0) {
-      localStorage.setItem('tasks', JSON.stringify(tasks))
-    }
-  }, [tasks])
 
   useEffect(() => {
     document.title = `${tasks.length} tasks`
@@ -44,48 +39,78 @@ function TaskList() {
     }
   }, [])
 
-  function addTask() {
+  async function addTask() {
     if (newTask.trim() === '') return
 
-    const task = {
-      id: Date.now(),
-      title: newTask,
-      completed: false,
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newTask.trim() }),
+      })
+
+      const newTaskFromServer = await response.json()
+      setTasks([newTaskFromServer, ...tasks])
+      setNewTask('')
+    } catch (error) {
+      console.error('Failed to add task:', error)
+    }
+  }
+
+  async function deleteTask(id) {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' })
+      setTasks(tasks.filter((task) => task._id !== id))
+    } catch (error) {
+      console.error('Failed to delete task:', error)
+    }
+  }
+
+  async function toggleComplete(id) {
+    const task = tasks.find((t) => t._id === id)
+    if (!task) return
+
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ completed: !task.completed }),
+      })
+
+      const updated = await response.json()
+      setTasks(tasks.map((t) => (t._id === id ? updated : t)))
+    } catch (error) {
+      console.error('Failed to toggle task:', error)
+    }
+  }
+
+  async function saveEdit(id, newTitle) {
+    if (newTitle.trim() === '') {
+      setEditingId(null)
+      return
     }
 
-    setTasks([...tasks, task])
-    setNewTask('')
-  }
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newTitle.trim() }),
+      })
 
-  function deleteTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id))
-  }
-
-  function toggleComplete(id) {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    )
-  }
-
-  function saveEdit(id, newTitle) {
-    if (newTitle.trim() === '') return
-
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, title: newTitle } : task
-      )
-    )
+      const updated = await response.json()
+      setTasks(tasks.map((t) => (t._id === id ? updated : t)))
+    } catch (error) {
+      console.error('Failed to edit task:', error)
+    }
 
     setEditingId(null)
   }
 
   async function handleMenuAction(action, task) {
     if (action === 'delete') {
-      deleteTask(task.id)
+      await deleteTask(task._id)
     } else if (action === 'complete') {
-      toggleComplete(task.id)
+      await toggleComplete(task._id)
     } else if (action === 'copy') {
       navigator.clipboard.writeText(task.title)
       alert('Copied to clipboard!')
@@ -103,7 +128,7 @@ function TaskList() {
         alert(`Your browser does not support sharing. Task: ${task.title}`)
       }
     } else if (action === 'edit') {
-      setEditingId(task.id)
+      setEditingId(task._id)
       setMenuOpenId(null)
       return
     }
@@ -158,23 +183,23 @@ function TaskList() {
       ) : (
         <ul>
           {filteredTasks.map((task) => (
-            <li key={task.id}>
+            <li key={task._id}>
               <input
                 type="checkbox"
                 checked={task.completed}
-                onChange={() => toggleComplete(task.id)}
+                onChange={() => toggleComplete(task._id)}
               />
 
-              {editingId === task.id ? (
+              {editingId === task._id ? (
                 <input
                   className="edit-input"
                   type="text"
                   defaultValue={task.title}
                   autoFocus
-                  onBlur={(event) => saveEdit(task.id, event.target.value)}
+                  onBlur={(event) => saveEdit(task._id, event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
-                      saveEdit(task.id, event.target.value)
+                      saveEdit(task._id, event.target.value)
                     } else if (event.key === 'Escape') {
                       setEditingId(null)
                     }
@@ -185,14 +210,14 @@ function TaskList() {
                   className="task-title"
                   onClick={(event) => {
                     event.stopPropagation()
-                    setMenuOpenId(menuOpenId === task.id ? null : task.id)
+                    setMenuOpenId(menuOpenId === task._id ? null : task._id)
                   }}
                 >
                   {task.title} {task.completed && '✓'}
                 </span>
               )}
 
-              {menuOpenId === task.id && (
+              {menuOpenId === task._id && (
                 <div
                   className="task-menu"
                   onClick={(event) => event.stopPropagation()}
