@@ -24,7 +24,7 @@ body {
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
 }
 
 /* ===== HEADER ===== */
@@ -56,7 +56,6 @@ header p {
   padding: 10px 20px;
   background-color: transparent;
   color: #777;
-  border: none;
   border-bottom: 3px solid transparent;
   font-size: 15px;
   font-weight: 600;
@@ -78,12 +77,14 @@ header p {
 /* ===== INPUT ROW ===== */
 .input-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 }
 
-.input-row input {
+.input-row input[type="text"] {
   flex: 1;
+  min-width: 150px;
   padding: 12px 15px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
@@ -92,10 +93,19 @@ header p {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.input-row input:focus {
+.input-row input[type="text"]:focus {
   outline: none;
   border-color: #e63946;
   box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+}
+
+.input-row input[type="datetime-local"] {
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #333;
 }
 
 .input-row button {
@@ -176,15 +186,36 @@ ul li input[type="checkbox"] {
   accent-color: #e63946;
 }
 
-/* ===== TASK TITLE ===== */
+/* ===== TASK TITLE & DUE DATE ===== */
+.task-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: pointer;
+}
+
 .task-title {
   cursor: pointer;
-  flex: 1;
   transition: color 0.2s ease;
 }
 
 .task-title:hover {
   color: #e63946;
+}
+
+.task-due-date {
+  font-size: 12px;
+  color: #777;
+}
+
+li.overdue .task-due-date {
+  color: #e63946;
+  font-weight: 600;
+}
+
+li.overdue {
+  background-color: #fff5f5;
 }
 
 /* ===== EDIT INPUT ===== */

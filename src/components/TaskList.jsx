@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 function TaskList() {
   const [tasks, setTasks] = useState([])
   const [newTask, setNewTask] = useState('')
+  const [newDueDate, setNewDueDate] = useState('')
   const [filter, setFilter] = useState('all')
   const [menuOpenId, setMenuOpenId] = useState(null)
   const [editingId, setEditingId] = useState(null)
@@ -43,15 +44,21 @@ function TaskList() {
     if (newTask.trim() === '') return
 
     try {
+      const body = { title: newTask.trim() }
+      if (newDueDate) {
+        body.dueDate = new Date(newDueDate).toISOString()
+      }
+
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: newTask.trim() }),
+        body: JSON.stringify(body),
       })
 
       const newTaskFromServer = await response.json()
       setTasks([newTaskFromServer, ...tasks])
       setNewTask('')
+      setNewDueDate('')
     } catch (error) {
       console.error('Failed to add task:', error)
     }
@@ -136,6 +143,17 @@ function TaskList() {
     setMenuOpenId(null)
   }
 
+  function formatDueDate(dateString) {
+    if (!dateString) return null
+    const date = new Date(dateString)
+    return date.toLocaleString()
+  }
+
+  function isOverdue(task) {
+    if (!task.dueDate || task.completed) return false
+    return new Date(task.dueDate) < new Date()
+  }
+
   const filteredTasks = tasks.filter((task) => {
     if (filter === 'active') return !task.completed
     if (filter === 'completed') return task.completed
@@ -153,6 +171,11 @@ function TaskList() {
           onKeyDown={(event) => {
             if (event.key === 'Enter') addTask()
           }}
+        />
+        <input
+          type="datetime-local"
+          value={newDueDate}
+          onChange={(event) => setNewDueDate(event.target.value)}
         />
         <button onClick={addTask}>Add</button>
       </div>
@@ -183,7 +206,7 @@ function TaskList() {
       ) : (
         <ul>
           {filteredTasks.map((task) => (
-            <li key={task._id}>
+            <li key={task._id} className={isOverdue(task) ? 'overdue' : ''}>
               <input
                 type="checkbox"
                 checked={task.completed}
@@ -206,15 +229,22 @@ function TaskList() {
                   }}
                 />
               ) : (
-                <span
-                  className="task-title"
+                <div
+                  className="task-info"
                   onClick={(event) => {
                     event.stopPropagation()
                     setMenuOpenId(menuOpenId === task._id ? null : task._id)
                   }}
                 >
-                  {task.title} {task.completed && '✓'}
-                </span>
+                  <span className="task-title">
+                    {task.title} {task.completed && '✓'}
+                  </span>
+                  {task.dueDate && (
+                    <span className="task-due-date">
+                      Due: {formatDueDate(task.dueDate)}
+                    </span>
+                  )}
+                </div>
               )}
 
               {menuOpenId === task._id && (
