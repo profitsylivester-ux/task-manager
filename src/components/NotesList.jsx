@@ -8,66 +8,70 @@ function NotesList() {
   const [editTitle, setEditTitle] = useState('')
   const [editBody, setEditBody] = useState('')
 
-  useEffect(() => {
-    const savedNotes = localStorage.getItem('notes')
+  const API_URL = `${import.meta.env.VITE_API_URL.replace('/tasks', '/notes')}`
 
-    if (savedNotes) {
-      setNotes(JSON.parse(savedNotes))
-    } else {
-      const initialNotes = [
-        {
-          id: 1,
-          title: 'Project ideas',
-          body: 'Ideas for new engineering and frontend projects.',
-        },
-        {
-          id: 2,
-          title: 'React learning notes',
-          body: 'Components, props, state, useEffect, lists, forms.',
-        },
-      ]
-      setNotes(initialNotes)
+  useEffect(() => {
+    async function loadNotes() {
+      try {
+        const response = await fetch(API_URL)
+        const data = await response.json()
+        setNotes(data)
+      } catch (error) {
+        console.error('Failed to load notes:', error)
+      }
     }
+
+    loadNotes()
   }, [])
 
-  useEffect(() => {
-    if (notes.length > 0) {
-      localStorage.setItem('notes', JSON.stringify(notes))
-    }
-  }, [notes])
-
-  function addNote() {
+  async function addNote() {
     if (newTitle.trim() === '' && newBody.trim() === '') return
 
-    const note = {
-      id: Date.now(),
-      title: newTitle || 'Untitled',
-      body: newBody,
-    }
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newTitle, body: newBody }),
+      })
 
-    setNotes([...notes, note])
-    setNewTitle('')
-    setNewBody('')
+      const newNote = await response.json()
+      setNotes([newNote, ...notes])
+      setNewTitle('')
+      setNewBody('')
+    } catch (error) {
+      console.error('Failed to add note:', error)
+    }
   }
 
-  function deleteNote(id) {
-    setNotes(notes.filter((note) => note.id !== id))
+  async function deleteNote(id) {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' })
+      setNotes(notes.filter((note) => note._id !== id))
+    } catch (error) {
+      console.error('Failed to delete note:', error)
+    }
   }
 
   function startEdit(note) {
-    setEditingId(note.id)
+    setEditingId(note._id)
     setEditTitle(note.title)
     setEditBody(note.body)
   }
 
-  function saveEdit() {
-    setNotes(
-      notes.map((note) =>
-        note.id === editingId
-          ? { ...note, title: editTitle, body: editBody }
-          : note
-      )
-    )
+  async function saveEdit() {
+    try {
+      const response = await fetch(`${API_URL}/${editingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: editTitle, body: editBody }),
+      })
+
+      const updated = await response.json()
+      setNotes(notes.map((n) => (n._id === editingId ? updated : n)))
+    } catch (error) {
+      console.error('Failed to edit note:', error)
+    }
+
     setEditingId(null)
     setEditTitle('')
     setEditBody('')
@@ -101,8 +105,8 @@ function NotesList() {
       ) : (
         <div className="notes-list">
           {notes.map((note) => (
-            <div className="note-card" key={note.id}>
-              {editingId === note.id ? (
+            <div className="note-card" key={note._id}>
+              {editingId === note._id ? (
                 <div>
                   <input
                     type="text"
@@ -124,7 +128,7 @@ function NotesList() {
                   <p>{note.body}</p>
                   <div className="note-actions">
                     <button onClick={() => startEdit(note)}>Edit</button>
-                    <button onClick={() => deleteNote(note.id)}>Delete</button>
+                    <button onClick={() => deleteNote(note._id)}>Delete</button>
                   </div>
                 </div>
               )}
