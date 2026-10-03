@@ -459,3 +459,119 @@ li.overdue {
   font-size: 14px;
   padding: 20px 0;
 }
+
+/* ===== AUTH PAGES ===== */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-form h1 {
+  font-size: 24px;
+  text-align: center;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.auth-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.auth-form input {
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #e63946;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+}
+
+.auth-form button {
+  padding: 14px;
+  background-color: #e63946;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-family: inherit;
+}
+
+.auth-form button:hover:not(:disabled) {
+  background-color: #c1121f;
+  transform: translateY(-2px);
+}
+
+.auth-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+}
+
+.auth-switch a {
+  color: #e63946;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.logout-btn {
+  margin-left: auto;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #e63946;
+  border: 1px solid #e63946;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #e63946;
+  color: #ffffff;
+}
+
+/* ===== WELCOME TEXT ===== */
+.welcome-text {
+  font-size: 13px;
+  color: #777;
+  text-align: right;
+  margin-bottom: 20px;
+}

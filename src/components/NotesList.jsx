@@ -9,11 +9,16 @@ function NotesList() {
   const [editBody, setEditBody] = useState('')
 
   const API_URL = `${import.meta.env.VITE_API_URL.replace('/tasks', '/notes')}`
+  const token = localStorage.getItem('token')
+  const authHeaders = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  }
 
   useEffect(() => {
     async function loadNotes() {
       try {
-        const response = await fetch(API_URL)
+        const response = await fetch(API_URL, { headers: authHeaders })
         const data = await response.json()
         setNotes(data)
       } catch (error) {
@@ -30,7 +35,7 @@ function NotesList() {
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders,
         body: JSON.stringify({ title: newTitle, body: newBody }),
       })
 
@@ -45,7 +50,10 @@ function NotesList() {
 
   async function deleteNote(id) {
     try {
-      await fetch(`${API_URL}/${id}`, { method: 'DELETE' })
+      await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+        headers: authHeaders,
+      })
       setNotes(notes.filter((note) => note._id !== id))
     } catch (error) {
       console.error('Failed to delete note:', error)
@@ -62,7 +70,7 @@ function NotesList() {
     try {
       const response = await fetch(`${API_URL}/${editingId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders,
         body: JSON.stringify({ title: editTitle, body: editBody }),
       })
 

@@ -10,11 +10,16 @@ function TaskList() {
   const [editingId, setEditingId] = useState(null)
 
   const API_URL = import.meta.env.VITE_API_URL
+  const token = localStorage.getItem('token')
+  const authHeaders = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  }
 
   useEffect(() => {
     async function loadTasks() {
       try {
-        const response = await fetch(API_URL)
+        const response = await fetch(API_URL, { headers: authHeaders })
         const data = await response.json()
         setTasks(data)
       } catch (error) {
@@ -76,7 +81,7 @@ function TaskList() {
 
       const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders,
         body: JSON.stringify(body),
       })
 
@@ -91,7 +96,10 @@ function TaskList() {
 
   async function deleteTask(id) {
     try {
-      await fetch(`${API_URL}/${id}`, { method: 'DELETE' })
+      await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+        headers: authHeaders,
+      })
       setTasks(tasks.filter((task) => task._id !== id))
     } catch (error) {
       console.error('Failed to delete task:', error)
@@ -105,7 +113,7 @@ function TaskList() {
     try {
       const response = await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders,
         body: JSON.stringify({ completed: !task.completed }),
       })
 
@@ -125,7 +133,7 @@ function TaskList() {
     try {
       const response = await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders,
         body: JSON.stringify({ title: newTitle.trim() }),
       })
 
