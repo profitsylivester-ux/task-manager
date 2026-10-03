@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { requestNotificationPermission, showNotification } from '../notifications'
 
 function TaskList() {
   const [tasks, setTasks] = useState([])
@@ -26,6 +27,30 @@ function TaskList() {
 
   useEffect(() => {
     document.title = `${tasks.length} tasks`
+  }, [tasks])
+
+  useEffect(() => {
+    requestNotificationPermission()
+  }, [])
+
+  useEffect(() => {
+    function checkDueTasks() {
+      tasks.forEach((task) => {
+        if (!task.dueDate || task.completed) return
+
+        const dueTime = new Date(task.dueDate).getTime()
+        const now = Date.now()
+        const diff = now - dueTime
+
+        if (diff >= 0 && diff < 60000) {
+          showNotification('Task due', task.title)
+        }
+      })
+    }
+
+    const interval = setInterval(checkDueTasks, 30000)
+
+    return () => clearInterval(interval)
   }, [tasks])
 
   useEffect(() => {
