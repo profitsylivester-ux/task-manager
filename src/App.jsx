@@ -34,33 +34,31 @@ function App() {
 
   return (
     <div className="app">
-      <Header title="Task Manager" subtitle="Organize your tasks. Get things done." />
+      <Header
+        title="Task Manager"
+        subtitle="Organize your tasks. Get things done."
+        user={user}
+        onLogout={handleLogout}
+      />
 
       {user && (
-        <>
-          <nav className="tab-row">
-            <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Tasks
-            </NavLink>
-            <NavLink
-              to="/notes"
-              className={({ isActive }) => (isActive ? 'active' : '')}
-            >
-              Notes
-            </NavLink>
-            <NavLink
-              to="/quote"
-              className={({ isActive }) => (isActive ? 'active' : '')}
-            >
-              Quote
-            </NavLink>
-            <button className="logout-btn" onClick={handleLogout}>
-              Logout
-            </button>
-          </nav>
-
-          <p className="welcome-text">Logged in as {user.email}</p>
-        </>
+        <nav className="tab-row">
+          <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Tasks
+          </NavLink>
+          <NavLink
+            to="/notes"
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
+            Notes
+          </NavLink>
+          <NavLink
+            to="/quote"
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
+            Quote
+          </NavLink>
+        </nav>
       )}
 
       <main>

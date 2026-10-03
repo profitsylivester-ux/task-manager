@@ -30,18 +30,93 @@ body {
 /* ===== HEADER ===== */
 header {
   margin-bottom: 30px;
-  text-align: center;
 }
 
-header h1 {
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.header-titles h1 {
   font-size: 28px;
   color: #1a1a1a;
   margin-bottom: 8px;
 }
 
-header p {
+.header-titles p {
   font-size: 15px;
   color: #777;
+}
+
+/* ===== USER MENU ===== */
+.user-menu {
+  position: relative;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e63946;
+  color: #ffffff;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.avatar:hover {
+  background-color: #c1121f;
+  transform: scale(1.05);
+}
+
+.dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  min-width: 200px;
+  display: none;
+  z-index: 10;
+}
+
+.user-menu:hover .dropdown {
+  display: block;
+}
+
+.dropdown-email {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  word-break: break-all;
+}
+
+.dropdown-logout {
+  width: 100%;
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #e63946;
+  border: 1px solid #e63946;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-logout:hover {
+  background-color: #e63946;
+  color: #ffffff;
 }
 
 /* ===== TAB ROW ===== */
@@ -546,32 +621,4 @@ li.overdue {
 
 .auth-switch a:hover {
   text-decoration: underline;
-}
-
-/* ===== LOGOUT BUTTON ===== */
-.logout-btn {
-  margin-left: auto;
-  padding: 8px 16px;
-  background-color: transparent;
-  color: #e63946;
-  border: 1px solid #e63946;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.logout-btn:hover {
-  background-color: #e63946;
-  color: #ffffff;
-}
-
-/* ===== WELCOME TEXT ===== */
-.welcome-text {
-  font-size: 13px;
-  color: #777;
-  text-align: right;
-  margin-bottom: 20px;
 }
