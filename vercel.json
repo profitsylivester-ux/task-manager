@@ -1,19 +1,10 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/((?!.well-known/).*)",
+      "source": "/((?!\\.well-known/|manifest\\.webmanifest|icon.*\\.png|favicon.*|sw\\.js|registerSW\\.js).*)",
       "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/.well-known/assetlinks.json",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        }
-      ]
     }
   ]
 }
