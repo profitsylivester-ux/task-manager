@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import TaskList from './components/TaskList'
 import NotesList from './components/NotesList'
 import QuoteBox from './components/QuoteBox'
+import InstallPrompt from './components/InstallPrompt'
 import Login from './pages/Login'
 import Register from './pages/Register'
 
@@ -40,6 +41,8 @@ function App() {
         user={user}
         onLogout={handleLogout}
       />
+
+      <InstallPrompt />
 
       {user && (
         <nav className="tab-row">
