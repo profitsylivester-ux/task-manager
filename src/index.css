@@ -1028,10 +1028,10 @@ li.overdue {
     padding: 12px;
     font-size: 14px;
   }
-
-  /* ===== INSTALL PROMPT ===== */
+/* ===== INSTALL PROMPT ===== */
 .install-prompt {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   background-color: #1e1e1e;
@@ -1040,13 +1040,14 @@ li.overdue {
   border-radius: 10px;
   margin-bottom: 20px;
   font-size: 14px;
+  position: relative;
 }
 
-.install-prompt span {
+.install-prompt > span {
   flex: 1;
 }
 
-.install-prompt button {
+.install-prompt > button {
   background-color: #ffffff;
   color: #1e1e1e;
   border: none;
@@ -1059,7 +1060,7 @@ li.overdue {
   transition: background-color 0.2s ease;
 }
 
-.install-prompt button:hover {
+.install-prompt > button:hover {
   background-color: #e5e7eb;
 }
 
@@ -1068,4 +1069,40 @@ li.overdue {
   color: #9ca3af !important;
   padding: 4px 8px !important;
   font-size: 16px !important;
+}
+
+.install-instructions {
+  width: 100%;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.install-instructions p {
+  margin-bottom: 8px;
+}
+
+.install-instructions strong {
+  color: #1e1e1e;
+}
+
+.install-close-instructions {
+  margin-top: 10px;
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.install-close-instructions:hover {
+  background-color: #000000 !important;
 }
