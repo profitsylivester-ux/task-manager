@@ -927,3 +927,104 @@ li.overdue {
     font-size: 11px;
   }
 }
+
+  /* Task menu on mobile — fit screen */
+  .task-menu {
+    right: 8px;
+    left: 8px;
+    top: 60px;
+    min-width: auto;
+    width: auto;
+  }
+
+  .task-menu button {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* Notes on mobile */
+  .note-form input,
+  .note-form textarea {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+
+  .note-form textarea {
+    min-height: 120px;
+  }
+
+  .note-form button {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .note-card {
+    padding: 18px 16px;
+  }
+
+  .note-card h3 {
+    font-size: 16px;
+  }
+
+  .note-card p {
+    font-size: 14px;
+  }
+
+  .note-actions button {
+    padding: 10px 16px;
+    font-size: 14px;
+    flex: 1;
+  }
+
+  .note-actions {
+    gap: 8px;
+  }
+
+  /* Quote on mobile */
+  .quote-text {
+    font-size: 17px;
+    padding: 0 8px;
+  }
+
+  .quote-box button {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  /* Auth pages on mobile */
+  .auth-form input {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+
+  .auth-form button {
+    padding: 16px;
+    font-size: 15px;
+  }
+
+  .auth-form h1 {
+    font-size: 22px;
+  }
+
+  /* Edit input on mobile */
+  .edit-input {
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+
+  /* Dropdown on mobile — full width and better spacing */
+  .dropdown {
+    min-width: 240px;
+    padding: 18px;
+  }
+
+  .dropdown-email {
+    font-size: 14px;
+  }
+
+  .dropdown-logout {
+    padding: 12px;
+    font-size: 14px;
+  }
