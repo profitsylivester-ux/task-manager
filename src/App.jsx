@@ -71,6 +71,29 @@ function App() {
         </Routes>
       </main>
 
+      {user && (
+        <nav className="bottom-nav">
+          <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+            <span className="bottom-nav-icon">☑</span>
+            <span className="bottom-nav-label">Tasks</span>
+          </NavLink>
+          <NavLink
+            to="/notes"
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
+            <span className="bottom-nav-icon">✎</span>
+            <span className="bottom-nav-label">Notes</span>
+          </NavLink>
+          <NavLink
+            to="/quote"
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
+            <span className="bottom-nav-icon">❝</span>
+            <span className="bottom-nav-label">Quote</span>
+          </NavLink>
+        </nav>
+      )}
+
       <Footer />
     </div>
   )

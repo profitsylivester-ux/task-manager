@@ -8,6 +8,7 @@ function TaskList() {
   const [filter, setFilter] = useState('all')
   const [menuOpenId, setMenuOpenId] = useState(null)
   const [editingId, setEditingId] = useState(null)
+  const [sheetOpen, setSheetOpen] = useState(false)
 
   const API_URL = import.meta.env.VITE_API_URL
   const token = localStorage.getItem('token')
@@ -89,6 +90,7 @@ function TaskList() {
       setTasks([newTaskFromServer, ...tasks])
       setNewTask('')
       setNewDueDate('')
+      setSheetOpen(false)
     } catch (error) {
       console.error('Failed to add task:', error)
     }
@@ -195,7 +197,8 @@ function TaskList() {
 
   return (
     <div>
-      <div className="input-row">
+      {/* DESKTOP INPUT ROW */}
+      <div className="input-row desktop-only">
         <input
           type="text"
           placeholder="Add a new task"
@@ -212,6 +215,49 @@ function TaskList() {
         />
         <button onClick={addTask}>Add</button>
       </div>
+
+      {/* FLOATING PEN (mobile only) */}
+      <button
+        className="fab"
+        onClick={() => setSheetOpen(true)}
+        aria-label="Add task"
+      >
+        ✎
+      </button>
+
+      {/* BOTTOM SHEET (mobile only) */}
+      {sheetOpen && (
+        <div className="sheet-overlay" onClick={() => setSheetOpen(false)}>
+          <div className="sheet" onClick={(event) => event.stopPropagation()}>
+            <div className="sheet-handle"></div>
+            <h3 className="sheet-title">New Task</h3>
+
+            <input
+              type="text"
+              placeholder="Task title"
+              value={newTask}
+              onChange={(event) => setNewTask(event.target.value)}
+              autoFocus
+            />
+
+            <label className="sheet-label">Due date (optional)</label>
+            <input
+              type="datetime-local"
+              value={newDueDate}
+              onChange={(event) => setNewDueDate(event.target.value)}
+            />
+
+            <div className="sheet-actions">
+              <button className="sheet-cancel" onClick={() => setSheetOpen(false)}>
+                Cancel
+              </button>
+              <button className="sheet-add" onClick={addTask}>
+                Add Task
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="filter-row">
         <button
