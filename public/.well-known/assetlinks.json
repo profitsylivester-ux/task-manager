@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.faida.taskmanager",
+      "sha256_cert_fingerprints": [
+        "CF:2B:07:B8:DE:C8:79:11:BA:82:09:25:39:31:E1:69:42:C3:26:A5:B4:0B:CA:7E:CA:3E:85:54:FC:1D:9F:85"
+      ]
+    }
+  }
+]
