@@ -11,6 +11,9 @@ export default defineConfig({
       filename: 'sw.js',
       registerType: 'autoUpdate',
       includeAssets: ['icons.svg', 'favicon.svg'],
+      injectManifest: {
+        injectionPoint: 'self.__WB_MANIFEST',
+      },
       manifest: {
         name: 'Task Manager',
         short_name: 'Tasks',

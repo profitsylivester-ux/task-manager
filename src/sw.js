@@ -1,10 +1,9 @@
-/* eslint-disable no-restricted-globals */
-import { precacheAndRoute } from 'workbox-precaching';
+import { precacheAndRoute } from 'workbox-precaching'
 
-// This is the required `fetch` handler for Android installability
+// A fetch handler that actually responds (not empty) is required for Android installability
 self.addEventListener('fetch', (event) => {
-  // You can leave this empty, or add custom caching logic here
-  // The presence of this listener is what matters for Android
-});
+  // This is a simple pass-through, but it's enough to satisfy Chrome Android
+  event.respondWith(fetch(event.request))
+})
 
-precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST)
